@@ -23,7 +23,7 @@
 	<script type="text/javascript">
 		var boardSize = 8;
 		var alternateRules = {
-			initialSetup : 'horizontal'	
+			initialSetup : 'diagonal'	
 		};
 	</script>
 	<script type="text/javascript" src="js/reversi.js"></script>
@@ -36,11 +36,11 @@
 	
 		<table id="score">
 			<tr>
-				<td>Player 1:</td>
+				<td>Black:</td>
 				<td colspan="2">{{players[0].score}}</td>
 			</tr>
 			<tr>
-				<td>Player 2:</td>
+				<td>White:</td>
 				<td colspan="2">{{players[1].score}}</td>
 			</tr>
 			<tr>
