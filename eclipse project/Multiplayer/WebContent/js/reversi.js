@@ -1,6 +1,7 @@
 angular.module('reversi', []);
 
 function ReversiController($scope, $http) {
+
 	var controller = this;
 
 	this.initSubscription($scope);
@@ -68,7 +69,7 @@ function ReversiController($scope, $http) {
 			controller.displayVictoryDialog();
 		}
 	};
-
+	// TODO refactor scope functions into board object
 	$scope.isBoardFull = function() {
 		for ( var row = 0; row < $scope.board.length; row++) {
 			for ( var column = 0; column < $scope.board[row].length; column++) {
