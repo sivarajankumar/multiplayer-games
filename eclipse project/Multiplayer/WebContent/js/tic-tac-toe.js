@@ -1,83 +1,16 @@
 angular.module('tic-tac-toe', []);
 
+
 function TicTacToeController($scope, $http) {
 	var controller = this;
 
-	// parse URL params
-	var params = $.url().param();
-	// server handles sending
-	// var sendChannel = params.player + 'vs' + params.opponent;
-	var receiveChannel = params.opponent + 'vs' + params.player;
-	// URL
-	var url = 'game-command';
-
-	// subscribe for opponent's moves
-	var cometCallback = function(response) {
-		var responseObj = JSON.parse(response);
-		if (responseObj.commandType == 'move') {
-			var move = responseObj.payload;
-			$scope.$apply(function() {
-				$scope.board[move.row][move.column].content = $scope.opponent;
-				$scope.checkVictory();
-			});
-		} else if (responseObj.commandType == 'quit-game') {
-			controller.showMessageDialog("Your opponent has left the game!", function() {
-				controller.goToLobby();
-			});
-		} else if (responseObj.commandType == 'restart-game') {
-			controller.showMessageDialog("Your opponent has restarted the game!", function() {
-				controller.hideDialogs();
-			});
-			$scope.$apply(function() {
-				$scope.resetBoard();
-			});
-		}
-	};
-	new PushClient(receiveChannel, function(response) {
-		cometCallback(response);
-	}).connect();
-
-	$scope.playAgain = function() {
-		$http({
-			method : 'POST',
-			url : url,
-			data : {
-				commandType : 'restart-game',
-				player : params.player,
-				opponent : params.opponent
-			}
-		}).success(function() {
-			console.log("restart posted");
-		});
-		controller.hideDialogs();
-		$scope.resetBoard();
-	};
-
-	$scope.backToLobby = function() {
-		$http({
-			method : 'POST',
-			url : url,
-			data : {
-				commandType : 'quit-game',
-				player : params.player,
-				opponent : params.opponent
-			}
-		}).success(function() {
-			console.log("quit posted");
-		});
-		controller.goToLobby();
-	};
-
+	this.initSubscription($scope);
+	this.initGameOverDialogMethods($scope, $http);
+	
 	// see which player is which side - X always begins
 	$scope.players = [ 'X', '0' ];
-	if (params.begin == 'true') {
-		$scope.player = $scope.players[0];
-		$scope.opponent = $scope.players[1];
-	} else {
-		$scope.player = $scope.players[1];
-		$scope.opponent = $scope.players[0];
-	}
-
+	this.initScopePlayers($scope);
+	
 	// setup board
 	$scope.resetBoard = function() {
 		$scope.board = controller.createBoard(boardSize);
@@ -88,6 +21,7 @@ function TicTacToeController($scope, $http) {
 
 	// click on a cell
 	$scope.placeSymbol = function(row, column) {
+		// if move not legal 
 		if ($scope.winner || $scope.board[row][column].content || $scope.players[$scope.currentPlayerIndex] != $scope.player)
 			return;
 
@@ -95,20 +29,9 @@ function TicTacToeController($scope, $http) {
 		$scope.board[row][column].content = $scope.players[$scope.currentPlayerIndex];
 
 		// post move to server
-		$http({
-			method : 'POST',
-			url : url,
-			data : {
-				payload : {
-					row : row,
-					column : column,
-				},
-				commandType : 'move',
-				player : params.player,
-				opponent : params.opponent
-			}
-		}).success(function() {
-			console.log("move posted");
+		controller.postMove($http, {
+			row : row,
+			column : column
 		});
 
 		// check victory
@@ -116,27 +39,17 @@ function TicTacToeController($scope, $http) {
 	};
 
 	$scope.checkVictory = function() {
-		if ($scope.currentPlayerIsVictorious()) {
+		if (currentPlayerIsVictorious($scope.board)) {
 			$scope.winner = $scope.players[$scope.currentPlayerIndex];
 			$scope.victoryText = $scope.winner + " wins!";
 			controller.displayVictoryDialog();
-		} else if ($scope.boardIsFull()) {
+		} else if (boardIsFull(board)) {
 			$scope.winner = 'noone';
 			$scope.victoryText = 'Draw!';
 			controller.displayVictoryDialog();
 		} else {
 			$scope.nextPlayer();
 		}
-	};
-
-	$scope.boardIsFull = function() {
-		for ( var i = 0; i < $scope.board.length; i++) {
-			for ( var j = 0; j < $scope.board.length; j++) {
-				if (!$scope.board[i][j].content)
-					return false;
-			}
-		}
-		return true;
 	};
 
 	$scope.nextPlayer = function() {
@@ -146,8 +59,7 @@ function TicTacToeController($scope, $http) {
 			this.currentPlayerIndex = 0;
 	};
 
-	$scope.currentPlayerIsVictorious = function() {
-		var board = $scope.board;
+	function currentPlayerIsVictorious(board) {
 		var length = board.length;
 
 		// check rows
@@ -157,7 +69,7 @@ function TicTacToeController($scope, $http) {
 			var firstValueInRow = row[0].content;
 			// if nothing in first cell, the row can't be full
 			if (!firstValueInRow)
-				break;
+				continue;
 			// go through the cells in the row
 			var rowFullSame = true;
 			for ( var c = 1; c < length && rowFullSame; c++) {
@@ -176,7 +88,7 @@ function TicTacToeController($scope, $http) {
 			var firstValueInColumn = board[0][columnCounter].content;
 			// if nothing in first cell, the row can't be full
 			if (!firstValueInColumn)
-				break;
+				continue;
 			// go through the cells in the column
 			var columnFullSame = true;
 			for ( var rowCounter = 1; rowCounter < length && columnFullSame; rowCounter++) {
@@ -220,7 +132,19 @@ function TicTacToeController($scope, $http) {
 		return false;
 	};
 
+	function boardIsFull(board) {
+		for ( var i = 0; i < board.length; i++) {
+			for ( var j = 0; j < board.length; j++) {
+				if (!board[i][j].content)
+					return false;
+			}
+		}
+		return true;
+	};
 }
+
+TicTacToeController.prototype = new AngularController();
+TicTacToeController.prototype.constructor = TicTacToeController;
 
 TicTacToeController.prototype.createBoard = function(length) {
 	var board = [];
@@ -236,41 +160,10 @@ TicTacToeController.prototype.createBoard = function(length) {
 	return board;
 };
 
-TicTacToeController.prototype.displayVictoryDialog = function() {
-	$('#victoryDialog').dialog({
-		modal : true
+TicTacToeController.prototype.opponentMoves = function($scope, move){
+	$scope.$apply(function() {
+		$scope.board[move.row][move.column].content = $scope.opponent;
+		$scope.checkVictory();
 	});
 };
 
-TicTacToeController.prototype.hideDialogs = function() {
-	try {
-		$('#victoryDialog').dialog("close");
-	} catch (dialogNotInitializedException) {
-	}
-	try {
-		$("#messageDialog").dialog(" close");
-	} catch (dialogNotInitializedException) {
-	}
-
-};
-
-TicTacToeController.prototype.goToLobby = function() {
-	window.location.href = "welcome-screen.jsp";
-};
-
-TicTacToeController.prototype.showMessageDialog = function(message, callback) {
-	$('#game-message').html(message);
-	$("#messageDialog").dialog({
-		modal : true,
-		buttons : {
-			OK : function() {
-				$(this).dialog("close");
-			}
-		},
-		close : function() {
-			if (callback)
-				callback();
-		}
-	});
-
-};
