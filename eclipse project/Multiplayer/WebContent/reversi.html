@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	
+	<title>Reversi</title>
+	
+	<link rel="stylesheet" href="css/blueprint/reset.css" />
+	
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
+	
+	<script type="text/javascript" src="js/lib/purl.js"></script>
+	<script type="text/javascript" src="js/my-lib/push_client.js"></script>
+	
+	<link rel="stylesheet" href="css/reversi.css" />
+	<script type="text/javascript">
+		var boardSize = 8;
+		var alternateRules = {
+			initialSetup : 'horizontal'	
+		};
+	</script>
+	<script type="text/javascript" src="js/reversi.js"></script>
+</head>
+<body>
+
+	<h1>Reversi</h1>
+	
+	<div id="content" ng-app="reversi" ng-controller="ReversiController">
+	
+		<table id="score">
+			<tr>
+				<td>Player 1:</td>
+				<td colspan="2">{{players[0].score}}</td>
+			</tr>
+			<tr>
+				<td>Player 2:</td>
+				<td colspan="2">{{players[1].score}}</td>
+			</tr>
+			<tr>
+				<td>Current player:</td>
+				<td>{{currentPlayer.name}}</td>
+				<td><div class="cell {{currentPlayer.name}}"></div></td>
+			</tr>
+		</table>
+		
+		<div id="board">
+			<div class="row" ng-repeat="row in board">
+				<div class="cell" ng-repeat="cell in row" ng-click="placePiece($parent.$index, $index)" >
+					<div class="circle {{cell.player.name}}" ng-show="cell.player"></div>
+				</div>
+			</div>
+		</div>
+		
+		<button ng-click="resetBoard()">Reset board</button>
+	
+	</div>
+</body>
+</html>
