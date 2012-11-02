@@ -16,13 +16,13 @@ function ReversiController($scope, $http) {
 	} ];
 	this.initScopePlayers($scope);
 
-	$scope.applyMove = function(player, rowIndex, columnIndex){
+	$scope.applyMove = function(player, rowIndex, columnIndex) {
 		$scope.board[rowIndex][columnIndex].player = player;
 		$scope.capturePieces(rowIndex, columnIndex);
 		$scope.updateScore();
 	};
-	
-	$scope.checkVictory = function(){
+
+	$scope.checkVictory = function() {
 		if ($scope.isBoardFull()) {
 			$scope.evaluateVictory();
 		} else {
@@ -36,7 +36,7 @@ function ReversiController($scope, $http) {
 			}
 		}
 	};
-	
+
 	// click on a cell
 	$scope.placePiece = function(rowIndex, columnIndex) {
 
@@ -49,7 +49,7 @@ function ReversiController($scope, $http) {
 				row : rowIndex,
 				column : columnIndex
 			});
-			
+
 			$scope.checkVictory();
 		}
 	};
@@ -66,12 +66,17 @@ function ReversiController($scope, $http) {
 
 	$scope.evaluateVictory = function() {
 		if ($scope.otherPlayer.score == $scope.currentPlayer.score) {
-			$scope.draw();
-			return;
+			// draw
+			$scope.winner = 'noone';
+			$scope.victoryText = 'Draw!';
+			controller.displayVictoryDialog();
+		} else {
+			if ($scope.otherPlayer.score > $scope.currentPlayer.score)
+				$scope.updatePlayers();
+			$scope.winner = $scope.players[$scope.currentPlayerIndex].name;
+			$scope.victoryText = $scope.winner + " wins!";
+			controller.displayVictoryDialog();
 		}
-		if ($scope.otherPlayer.score > $scope.currentPlayer.score)
-			$scope.updatePlayers();
-		$scope.victory();
 	};
 
 	$scope.isBoardFull = function() {
@@ -191,7 +196,7 @@ function ReversiController($scope, $http) {
 			$scope.otherPlayer = controller.players[1];
 		}
 	};
-	
+
 	// setup board
 	$scope.resetBoard = function() {
 		$scope.board = controller.createBoard(boardSize);
@@ -252,4 +257,3 @@ ReversiController.prototype.horizontalSetup = function(board) {
 	board[4][4].player = this.players[0];
 	board[4][3].player = this.players[0];
 };
-
