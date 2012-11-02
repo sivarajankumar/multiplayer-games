@@ -1,5 +1,13 @@
 @CHARSET "ISO-8859-1";
 
+#score div {
+	display: inline-block;
+}
+
+#score img {
+	height: 52px;
+}
+
 #board {
 	display: table;
 	border: 1px solid black;
