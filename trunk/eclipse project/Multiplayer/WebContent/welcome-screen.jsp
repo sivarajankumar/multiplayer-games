@@ -26,7 +26,7 @@
 	<script type="text/javascript" src="js/lib/jquery.blockUI.js"></script>
 	<!-- My Libs -->
 	<script type="text/javascript" src="js/my-lib/push_client.js"></script>
-	<script type="text/javascript" src="js/my-lib/angular-datatable.js"></script>
+	<script type="text/javascript" src="js/my-lib/angular-ui-components.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="css/welcome-screen.css" />
 
