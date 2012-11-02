@@ -194,7 +194,7 @@ function ReversiController($scope, $http) {
 	
 	// setup board
 	$scope.resetBoard = function() {
-		$scope.board = controller.createBoard();
+		$scope.board = controller.createBoard(boardSize);
 		$scope.currentPlayerIndex = 0;
 		$scope.currentPlayer = controller.players[0];
 		$scope.otherPlayer = controller.players[1];
@@ -215,7 +215,7 @@ ReversiController.prototype.opponentMoves = function($scope, move) {
 	});
 };
 
-ReversiController.prototype.createBoard = function() {
+ReversiController.prototype.createBoard = function(boardSize) {
 	var board = [];
 
 	for ( var i = 0; i < boardSize; i++) {
