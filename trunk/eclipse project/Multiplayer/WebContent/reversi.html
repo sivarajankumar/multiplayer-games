@@ -7,11 +7,18 @@
 	
 	<link rel="stylesheet" href="css/blueprint/reset.css" />
 	
+	<!-- jQuery -->
+	<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/themes/base/jquery-ui.css" />
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/jquery-ui.min.js"></script>
+	<!-- Angular -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
 	
 	<script type="text/javascript" src="js/lib/purl.js"></script>
 	<script type="text/javascript" src="js/my-lib/push_client.js"></script>
+	<script type="text/javascript" src="js/my-lib/angular-components.js"></script>
 	
+	<link rel="stylesheet" href="css/games.css" />
 	<link rel="stylesheet" href="css/reversi.css" />
 	<script type="text/javascript">
 		var boardSize = 8;
@@ -39,7 +46,7 @@
 			<tr>
 				<td>Current player:</td>
 				<td>{{currentPlayer.name}}</td>
-				<td><div class="cell {{currentPlayer.name}}"></div></td>
+				<td><div class="cell {{currentPlayer.name}}"></div><img src="images/spinner.gif" ng-hide="players[currentPlayerIndex] == player" /></td>
 			</tr>
 		</table>
 		
@@ -51,7 +58,16 @@
 			</div>
 		</div>
 		
-		<button ng-click="resetBoard()">Reset board</button>
+		<!-- <button ng-click="resetBoard()">Reset board</button> -->
+		
+		<div id="victoryDialog" class="game-dialog" title="Game over">
+	 		<p>{{ victoryText }}</p>
+	 		<button class="styled-button" ng-click="playAgain()">Play again</button>
+	 		<button class="styled-button" ng-click="backToLobby()">Back to lobby</button>
+	 	</div>
+	 	<div id="messageDialog" class="game-dialog" title="Game over">
+	 		<p id="game-message"></p>
+	 	</div>
 	
 	</div>
 </body>
