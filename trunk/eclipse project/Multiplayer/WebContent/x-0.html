@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+	<title>Tic-Tac-Toe</title>
+	
+	<link rel="stylesheet" href="css/blueprint/reset.css" />
+	
+	<!-- jQuery -->
+	<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/themes/base/jquery-ui.css" />
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/jquery-ui.min.js"></script>
+	<!-- Angular -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
+	
+	<script type="text/javascript" src="js/lib/purl.js"></script>
+	<script type="text/javascript" src="js/my-lib/push_client.js"></script>
+	
+	<link rel="stylesheet" href="css/tic-tac-toe.css" />
+	<script type="text/javascript">
+		var boardSize = 3;
+	</script>
+	<script type="text/javascript" src="js/tic-tac-toe.js"></script>
+</head>
+<body>
+
+	<div id="content" ng-app="tic-tac-toe" ng-controller="TicTacToeController">
+	
+		<h1>Tic-Tac-Toe : X - 0</h1>
+	
+		<p id="next-move">Next move: {{ players[currentPlayerIndex] }} <img src="images/spinner.gif" ng-hide="players[currentPlayerIndex] == player" /></p>
+	
+		<div id="board">
+			<div class="row" ng-repeat="row in board">
+				<div class="cell" ng-repeat="cell in row" ng-click="placeSymbol($parent.$index, $index)">{{cell.content}}</div>
+			</div>
+		</div>
+		<!-- 
+		<button ng-click="resetBoard()">Reset board</button>
+	 	-->
+	 	
+	 	<div id="victoryDialog" class="game-dialog" title="Game over">
+	 		<p>{{ victoryText }}</p>
+	 		<button class="styled-button" ng-click="playAgain()">Play again</button>
+	 		<button class="styled-button" ng-click="backToLobby()">Back to lobby</button>
+	 	</div>
+	 	<div id="messageDialog" class="game-dialog" title="Game over">
+	 		<p id="game-message"></p>
+	 	</div>
+	</div>
+
+</body>
+</html>
