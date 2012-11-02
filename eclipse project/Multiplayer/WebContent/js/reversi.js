@@ -54,16 +54,6 @@ function ReversiController($scope, $http) {
 		}
 	};
 
-	$scope.draw = function() {
-		$scope.winner = $scope.players;
-		alert("draw!");
-	};
-
-	$scope.victory = function() {
-		$scope.winner = $scope.currentPlayer;
-		alert("victory for " + $scope.winner.name);
-	};
-
 	$scope.evaluateVictory = function() {
 		if ($scope.otherPlayer.score == $scope.currentPlayer.score) {
 			// draw
