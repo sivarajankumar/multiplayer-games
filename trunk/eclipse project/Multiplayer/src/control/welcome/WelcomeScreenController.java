@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Game;
+import model.GameParameter;
 import persistence.GameRepository;
 import persistence.mock.GameRepositoryMock;
 import services.GameRegistry;
@@ -27,6 +28,7 @@ public class WelcomeScreenController {
 	static class GameDTO {
 		String id;
 		String name;
+		List<GameParameter> parameters;
 	}
 	
 	public String getAvailableGames() {
@@ -36,6 +38,7 @@ public class WelcomeScreenController {
 			GameDTO dto = new GameDTO();
 			dto.id = game.getGameId();
 			dto.name = game.getShortName();
+			dto.parameters = game.getGameParameters();
 			gameDTOs.add(dto);
 		}
 		return gson.toJson(gameDTOs);
