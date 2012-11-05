@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Game;
+import model.GameParameter.BooleanParameter;
 import model.GameParameter.EnumerationParameter;
 import persistence.GameRepository;
 
@@ -15,9 +16,33 @@ public class GameRepositoryMock implements GameRepository {
 	public GameRepositoryMock() {
 		Game x0 = createTicTacToe();
 		Game reversi = createReversi();
+		Game jungleChess = createJungleChess();
 
 		games.add(x0);
 		games.add(reversi);
+		games.add(jungleChess);
+	}
+
+	private Game createJungleChess() {
+		// TODO integrate jungle chess
+		Game jungleChess = new Game();
+		jungleChess.setGameId("jungle-chess");
+		jungleChess.setShortName("Jungle Chess");
+		jungleChess.setName("Jungle Chess - Dou Shou Qi");
+		String jungleChessDescription = "Jungle or Dou Shou Qi (Chinese: \"Game of Fighting Animals\") is a traditional Chinese board game played on a 7×9 board. The game is also known as The Jungle Game, Jungle Chess, or Animal Chess. Each side has eight pieces representing different animals, each with a different rank. Higher ranking pieces can capture all pieces of identical or weaker ranking. The goal of the game is either to move a piece onto a special square, the den, on the opponent's side of the board, or capture all of the opponent's pieces.";
+		jungleChess.setDescription(jungleChessDescription);
+		
+		jungleChess.addGameParameter( new BooleanParameter("elephantMayKillRat", true) );
+		jungleChess.addGameParameter( new BooleanParameter("tigerEqualsLion", false) );
+		jungleChess.addGameParameter( new BooleanParameter("leopardJump", false) );
+		jungleChess.addGameParameter( new BooleanParameter("lionJump", true) );
+		jungleChess.addGameParameter( new BooleanParameter("universalTraps", false) );
+		jungleChess.addGameParameter( new BooleanParameter("foxReplacesWolf", false) );
+		jungleChess.addGameParameter( new BooleanParameter("attackFromWater", false) );
+		jungleChess.addGameParameter( new BooleanParameter("highLevelAnimalsMayEnterTraps", true));
+		jungleChess.addGameParameter( new BooleanParameter("dogCanSwim", false));
+		
+		return jungleChess;
 	}
 
 	private Game createReversi() {
