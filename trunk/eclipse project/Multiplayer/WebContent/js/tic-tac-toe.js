@@ -60,6 +60,8 @@ function TicTacToeController($scope, $http) {
 			this.currentPlayerIndex = 0;
 	};
 
+	// TODO refactor functions into board object
+	
 	function currentPlayerIsVictorious(board) {
 		var length = board.length;
 
