@@ -109,8 +109,7 @@ AngularController.prototype.initScopePlayers = function($scope) {
 };
 
 AngularController.prototype.opponentMoves = function($scope, move) {
-	throw "Override this method!";
-	// TODO highlight opponent's last move
+	throw "Override this method and highlight opponent's last move!";
 };
 
 AngularController.prototype.resetGame = function($scope) {
