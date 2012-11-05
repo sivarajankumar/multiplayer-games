@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import model.User;
 import services.GameRegistry;
 import web.GameListUpdater;
+
+import com.google.gson.Gson;
+
 import constants.Keys;
 
 /**
@@ -23,7 +26,9 @@ public class GameCreator extends HttpServlet {
 	// TODO dependency injection
 	private GameRegistry gameRegistry = GameRegistry.getInstance();
 	private GameListUpdater gameListUpdater = new GameListUpdater();
-	
+
+	private Gson gson = new Gson();
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -31,16 +36,31 @@ public class GameCreator extends HttpServlet {
 		super();
 	}
 
+	public static class GameCreateCommand {
+		public Object gameParameters;
+		public String gameType;
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String gameType = request.getParameter("game-type");
+
+		// get JSON data
+		StringBuilder sb = new StringBuilder();
+		String commandString;
+		while ((commandString = request.getReader().readLine()) != null) {
+			sb.append(commandString);
+		}
+		commandString = sb.toString();
+		// deserialize to find out which player and which opponent
+		GameCreateCommand createCommand = gson.fromJson(commandString, GameCreateCommand.class);
+
 		User user = (User) request.getSession().getAttribute(Keys.SESSION_USER);
-		
-		gameRegistry.addCreatedGame(user, gameType);
-		
+
+		gameRegistry.addCreatedGame(user.getUserName(), createCommand);
+
 		gameListUpdater.updateOpenGamesList(request);
 	}
 

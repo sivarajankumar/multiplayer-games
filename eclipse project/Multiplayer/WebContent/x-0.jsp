@@ -1,3 +1,11 @@
+<%@page import="control.game.GameController"%>
+<%@page import="constants.Keys"%>
+<%@page import="model.User"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<% 
+	User user = (User)session.getAttribute(Keys.SESSION_USER); 
+	GameController controller = new GameController();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +28,7 @@
 	<link rel="stylesheet" href="css/games.css" />
 	<link rel="stylesheet" href="css/tic-tac-toe.css" />
 	<script type="text/javascript">
-		var boardSize = 3;
+		var gameParameters = <%= controller.getGameOptions(user) %>;
 	</script>
 	<script type="text/javascript" src="js/tic-tac-toe.js"></script>
 </head>

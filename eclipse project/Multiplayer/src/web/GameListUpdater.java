@@ -16,7 +16,7 @@ public class GameListUpdater {
 	private Gson gson = new Gson();
 	
 	public void updateOpenGamesList(HttpServletRequest request, String... excludeUsers){
-		String gamesList = gson.toJson(gameRegistry.getGameDTOs());
+		String gamesList = gson.toJson(gameRegistry.getGameDTOsForOpenGames());
 		String channel = Constants.GAMES_CHANNEL;
 		
 		ChannelUpdater channelUpdater = new ChannelUpdater();

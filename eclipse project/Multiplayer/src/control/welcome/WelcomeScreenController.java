@@ -45,7 +45,7 @@ public class WelcomeScreenController {
 	}
 
 	public String getOpenGames() {
-		return gson.toJson(gameService.getGameDTOs());
+		return gson.toJson(gameService.getGameDTOsForOpenGames());
 	}
 
 }
