@@ -28,6 +28,7 @@
 	<script type="text/javascript" src="js/my-lib/push_client.js"></script>
 	<script type="text/javascript" src="js/my-lib/angular-ui-components.js"></script>
 
+	<link rel="stylesheet" type="text/css" href="css/games.css" />
 	<link rel="stylesheet" type="text/css" href="css/welcome-screen.css" />
 
 	<script type="text/javascript">
@@ -43,7 +44,11 @@
 		<div id="games-container">
 			<p>Join a game:</p>
 			<datatable ao-columns="columns" aa-data="games" post-processor="assignEvents(dataTable)"></datatable>
-			<p id="game-description">{{selectedOpenGame.gameName}}<br/>{{selectedOpenGame.gameDescription}}</p>
+			<p id="game-description">
+				{{selectedOpenGame.gameName}}
+				<br/>
+				{{selectedOpenGame.gameDescription}}
+			</p>
 		</div>
 
 		<div id="create-game-container">
@@ -52,8 +57,17 @@
 				<select id="game-selector" ng-model="selectedGame" ng-options="g.name for g in availableGames"></select> 
 				<input id="create-game-submit" type="submit" value="Create!" />
 			</form>
+			<div id="create-game-dialog" class="game-dialog">
+				<p>Start playing {{selectedGame.name}} with the following rules:</p>
+				<ul>
+					<li ng-repeat="gameOption in selectedGame.parameters">
+						<label for="{{gameOption.name}}-select">{{ gameOption.name }}</label>
+						<select id="{{gameOption.name}}-select" ng-model="createdGame.gameParameters[gameOption.name]" ng-options="value for value in gameOption.values"></select>
+					</li>
+				</ul>
+			</div>
 		</div>
-
+		
 	</div>
 </body>
 </html>
