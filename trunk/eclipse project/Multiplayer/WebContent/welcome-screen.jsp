@@ -61,6 +61,7 @@
 				<p>Start playing {{selectedGame.name}} with the following rules:</p>
 				<ul>
 					<% // TODO rename everywhere either to game options or game parameters %>
+					<% // TODO beautify %>
 					<li ng-repeat="gameOption in selectedGame.parameters | filter:{type : 'enumeration'}">
 						<label for="{{gameOption.name}}-select">{{ gameOption.name }}</label>
 						<select id="{{gameOption.name}}-select" ng-model="createdGame.gameParameters[gameOption.name]" ng-options="value for value in gameOption.values"></select>
