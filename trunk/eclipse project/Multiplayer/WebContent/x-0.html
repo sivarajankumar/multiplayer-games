@@ -34,7 +34,7 @@
 	
 		<div id="board">
 			<div class="row" ng-repeat="row in board">
-				<div class="cell" ng-repeat="cell in row" ng-click="placeSymbol($parent.$index, $index)">{{cell.content}}</div>
+				<div class="cell" ng-class="{ 'last-move' : cell == opponentsLastMove }" ng-repeat="cell in row" ng-click="placeSymbol($parent.$index, $index)">{{cell.content}}</div>
 			</div>
 		</div>
 		<!-- 

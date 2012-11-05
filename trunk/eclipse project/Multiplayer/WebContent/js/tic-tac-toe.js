@@ -15,7 +15,8 @@ function TicTacToeController($scope, $http) {
 	$scope.resetBoard = function() {
 		$scope.board = controller.createBoard(boardSize);
 		$scope.currentPlayerIndex = 0;
-		$scope.winner = null;
+		delete $scope.winner;
+		delete $scope.opponentsLastMove;
 	};
 	$scope.resetBoard();
 
@@ -163,6 +164,7 @@ TicTacToeController.prototype.createBoard = function(length) {
 TicTacToeController.prototype.opponentMoves = function($scope, move){
 	$scope.$apply(function() {
 		$scope.board[move.row][move.column].content = $scope.opponent;
+		$scope.opponentsLastMove = $scope.board[move.row][move.column];
 		$scope.checkVictory();
 	});
 };
