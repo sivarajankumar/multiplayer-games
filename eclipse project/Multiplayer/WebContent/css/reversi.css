@@ -1,12 +1,37 @@
 @CHARSET "ISO-8859-1";
 
-#score div {
+#content {
+	width: 450px;
+	margin: 0 auto;
+	font-family: "Comic Sans MS", serif; 
+}
+
+h1 {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+/* display score */
+
+td.score {
+	text-align: center;
+}
+
+#current-player p {
 	display: inline-block;
 }
 
-#score img {
-	height: 52px;
+#player-color {
+	display: inline-block;
+	height: 20px;
+	width: 20px;
 }
+
+#spinner {
+	height: 20px;
+}
+
+/* game board */
 
 #board {
 	display: table;
