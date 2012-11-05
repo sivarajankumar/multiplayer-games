@@ -44,5 +44,5 @@ p#next-move img {
 }
 
 .cell.last-move {
-	border-color: red;
+	color: red;
 }
