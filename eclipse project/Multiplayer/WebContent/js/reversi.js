@@ -3,6 +3,7 @@ angular.module('reversi', []);
 function ReversiController($scope, $http) {
 
 	var controller = this;
+	var boardLogic = new ReversiBoardLogic();
 
 	this.initSubscription($scope);
 	this.initGameOverDialogMethods($scope, $http);
@@ -19,19 +20,19 @@ function ReversiController($scope, $http) {
 
 	$scope.applyMove = function(player, rowIndex, columnIndex) {
 		$scope.board[rowIndex][columnIndex].player = player;
-		$scope.capturePieces(rowIndex, columnIndex);
+		boardLogic.capturePieces(rowIndex, columnIndex, $scope.currentPlayer);
 		$scope.updateScore();
 	};
 
 	$scope.checkVictory = function() {
-		if ($scope.isBoardFull()) {
+		if (boardLogic.isBoardFull()) {
 			$scope.evaluateVictory();
 		} else {
 			// next player
 			$scope.updatePlayers();
-			if (!$scope.playerCanMove()) {
+			if (!boardLogic.playerCanMove($scope.currentPlayer)) {
 				$scope.updatePlayers();
-				if (!$scope.playerCanMove()) {
+				if (!boardLogic.playerCanMove($scope.currentPlayer)) {
 					$scope.evaluateVictory();
 				}
 			}
@@ -41,7 +42,7 @@ function ReversiController($scope, $http) {
 	// click on a cell
 	$scope.placePiece = function(rowIndex, columnIndex) {
 
-		if ($scope.isLegalMove(rowIndex, columnIndex) && $scope.currentPlayer == $scope.player) {
+		if (boardLogic.isLegalMove(rowIndex, columnIndex, $scope.currentPlayer) && $scope.currentPlayer == $scope.player) {
 
 			// do move locally
 			$scope.applyMove($scope.player, rowIndex, columnIndex);
@@ -69,16 +70,6 @@ function ReversiController($scope, $http) {
 			controller.displayVictoryDialog();
 		}
 	};
-	// TODO refactor scope functions into board object
-	$scope.isBoardFull = function() {
-		for ( var row = 0; row < $scope.board.length; row++) {
-			for ( var column = 0; column < $scope.board[row].length; column++) {
-				if (!$scope.board[row][column].player)
-					return false;
-			}
-		}
-		return true;
-	};
 
 	$scope.updateScore = function() {
 		for ( var i = 0; i < $scope.players.length; i++) {
@@ -92,88 +83,6 @@ function ReversiController($scope, $http) {
 			}
 			player.score = score;
 		}
-	};
-
-	$scope.playerCanMove = function() {
-		for ( var row = 0; row < $scope.board.length; row++) {
-			for ( var column = 0; column < $scope.board[row].length; column++) {
-				if ((!$scope.board[row][column].player) && $scope.isLegalMove(row, column)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	};
-
-	$scope.getPiecesInDirection = function(rowIndex, columnIndex, direction) {
-		var left = direction == 'left' || direction == 'upper-left' || direction == 'lower-left';
-		var right = direction == 'right' || direction == 'upper-right' || direction == 'lower-right';
-		var up = direction == 'up' || direction == 'upper-left' || direction == 'upper-right';
-		var down = direction == 'down' || direction == 'lower-left' || direction == 'lower-right';
-
-		function getNextRowIndex(rowIndex) {
-			if (up)
-				return rowIndex - 1;
-			if (down)
-				return rowIndex + 1;
-			return rowIndex;
-		}
-
-		function getNextColumnIndex(columnIndex) {
-			if (left)
-				return columnIndex - 1;
-			if (right)
-				return columnIndex + 1;
-			return columnIndex;
-		}
-
-		var cells = [];
-		var cellHasDisc = false;
-		do {
-			var rowIndex = getNextRowIndex(rowIndex);
-			var columnIndex = getNextColumnIndex(columnIndex);
-			cellHasDisc = this.board[rowIndex] && this.board[rowIndex][columnIndex] && this.board[rowIndex][columnIndex].player;
-			if (cellHasDisc)
-				cells.push(this.board[rowIndex][columnIndex]);
-		} while (cellHasDisc);
-
-		return cells;
-
-	};
-
-	$scope.capturePieces = function(rowIndex, columnIndex) {
-		var directions = [ 'left', 'right', 'up', 'down', 'upper-left', 'lower-left', 'upper-right', 'lower-right' ];
-		for ( var i = 0; i < directions.length; i++) {
-			var cells = $scope.getPiecesInDirection(rowIndex, columnIndex, directions[i]);
-			// if neighbor belongs to other player
-			if (cells.length > 1 && cells[0].player == $scope.otherPlayer) {
-				for ( var j = 1; j < cells.length; j++)
-					// look for cell belonging to current player
-					if (cells[j].player == $scope.currentPlayer) {
-						// turn cells between
-						for ( var k = 0; k < j; k++) {
-							cells[k].player = $scope.currentPlayer;
-						}
-						break;
-					}
-			}
-		}
-	};
-
-	$scope.isLegalMove = function(rowIndex, columnIndex) {
-		var directions = [ 'left', 'right', 'up', 'down', 'upper-left', 'lower-left', 'upper-right', 'lower-right' ];
-		for ( var i = 0; i < directions.length; i++) {
-			var cells = $scope.getPiecesInDirection(rowIndex, columnIndex, directions[i]);
-			// if neighbor belongs to other player
-			if (cells.length > 1 && cells[0].player == $scope.otherPlayer) {
-				for ( var j = 1; j < cells.length; j++)
-					// look for cell belonging to current player
-					if (cells[j].player == $scope.currentPlayer)
-						return true;
-			}
-		}
-
-		return false;
 	};
 
 	$scope.updatePlayers = function() {
@@ -190,7 +99,7 @@ function ReversiController($scope, $http) {
 
 	// setup board
 	$scope.resetBoard = function() {
-		$scope.board = controller.createBoard(boardSize);
+		$scope.board = boardLogic.initBoard(boardSize, 'diagonal', this.players);
 		$scope.currentPlayerIndex = 0;
 		$scope.currentPlayer = controller.players[0];
 		$scope.otherPlayer = controller.players[1];
@@ -213,40 +122,138 @@ ReversiController.prototype.opponentMoves = function($scope, move) {
 	});
 };
 
-ReversiController.prototype.createBoard = function(boardSize) {
+function ReversiBoardLogic(){
+};
+
+ReversiBoardLogic.prototype.initBoard = function(boardSize, setup, players){
 	var board = [];
 
 	for ( var i = 0; i < boardSize; i++) {
 		var row = [];
 		for ( var j = 0; j < boardSize; j++) {
-			row.push({
-
-			});
+			row.push({});
 		}
 		board.push(row);
 	}
 
-	if (alternateRules.initialSetup == 'diagonal') {
-		this.diagonalSetup(board);
-	} else if (alternateRules.initialSetup == 'horizontal') {
-		this.horizontalSetup(board);
+	if (setup == 'diagonal') {
+		this.diagonalSetup(board, players);
+	} else if (setup == 'horizontal') {
+		this.horizontalSetup(board, players);
 	}
+	
+	this.reversiBoard = board;
 
 	return board;
 };
 
-ReversiController.prototype.diagonalSetup = function(board) {
-	// TODO generalize for larger boards
-	board[3][3].player = this.players[1];
-	board[3][4].player = this.players[0];
-	board[4][4].player = this.players[1];
-	board[4][3].player = this.players[0];
+ReversiBoardLogic.prototype.diagonalSetup = function(board, players) {
+	var j = Math.floor( board.length / 2 );
+	var i = j - 1;
+	board[i][i].player = players[1];
+	board[i][j].player = players[0];
+	board[j][j].player = players[1];
+	board[j][i].player = players[0];
 };
 
-ReversiController.prototype.horizontalSetup = function(board) {
-	// TODO generalize for larger boards
-	board[3][3].player = this.players[1];
-	board[3][4].player = this.players[1];
-	board[4][4].player = this.players[0];
-	board[4][3].player = this.players[0];
+ReversiBoardLogic.prototype.horizontalSetup = function(board, players) {
+	var j = Math.floor( board.length / 2 );
+	var i = j - 1;
+	board[i][i].player = players[1];
+	board[i][j].player = players[1];
+	board[j][j].player = players[0];
+	board[j][i].player = players[0];
+};
+
+ReversiBoardLogic.prototype.isBoardFull = function() {
+	var board = this.reversiBoard;
+	for ( var row = 0; row < board.length; row++) {
+		for ( var column = 0; column < board[row].length; column++) {
+			if (!board[row][column].player)
+				return false;
+		}
+	}
+	return true;
+};
+
+ReversiBoardLogic.prototype.getPiecesInDirection = function(rowIndex, columnIndex, direction) {
+	var left = direction == 'left' || direction == 'upper-left' || direction == 'lower-left';
+	var right = direction == 'right' || direction == 'upper-right' || direction == 'lower-right';
+	var up = direction == 'up' || direction == 'upper-left' || direction == 'upper-right';
+	var down = direction == 'down' || direction == 'lower-left' || direction == 'lower-right';
+
+	function getNextRowIndex(rowIndex) {
+		if (up)
+			return rowIndex - 1;
+		if (down)
+			return rowIndex + 1;
+		return rowIndex;
+	}
+
+	function getNextColumnIndex(columnIndex) {
+		if (left)
+			return columnIndex - 1;
+		if (right)
+			return columnIndex + 1;
+		return columnIndex;
+	}
+
+	var cells = [];
+	var cellHasDisc = false;
+	do {
+		rowIndex = getNextRowIndex(rowIndex);
+		columnIndex = getNextColumnIndex(columnIndex);
+		cellHasDisc = this.reversiBoard[rowIndex] && this.reversiBoard[rowIndex][columnIndex] && this.reversiBoard[rowIndex][columnIndex].player;
+		if (cellHasDisc)
+			cells.push(this.reversiBoard[rowIndex][columnIndex]);
+	} while (cellHasDisc);
+
+	return cells;
+
+};
+
+ReversiBoardLogic.prototype.capturePieces = function(rowIndex, columnIndex, currentPlayer) {
+	var directions = [ 'left', 'right', 'up', 'down', 'upper-left', 'lower-left', 'upper-right', 'lower-right' ];
+	for ( var i = 0; i < directions.length; i++) {
+		var cells = this.getPiecesInDirection(rowIndex, columnIndex, directions[i]);
+		// if neighbor belongs to other player
+		if (cells.length > 1 && cells[0].player != currentPlayer) {
+			for ( var j = 1; j < cells.length; j++)
+				// look for cell belonging to current player
+				if (cells[j].player == currentPlayer) {
+					// turn cells between
+					for ( var k = 0; k < j; k++) {
+						cells[k].player = currentPlayer;
+					}
+					break;
+				}
+		}
+	}
+};
+
+ReversiBoardLogic.prototype.playerCanMove = function(currentPlayer) {
+	for ( var row = 0; row < this.reversiBoard.length; row++) {
+		for ( var column = 0; column < this.reversiBoard[row].length; column++) {
+			if ((!this.reversiBoard[row][column].player) && this.isLegalMove(row, column, currentPlayer)) {
+				return true;
+			}
+		}
+	}
+	return false;
+};
+
+ReversiBoardLogic.prototype.isLegalMove = function(rowIndex, columnIndex, currentPlayer) {
+	var directions = [ 'left', 'right', 'up', 'down', 'upper-left', 'lower-left', 'upper-right', 'lower-right' ];
+	for ( var i = 0; i < directions.length; i++) {
+		var cells = this.getPiecesInDirection(rowIndex, columnIndex, directions[i]);
+		// if neighbor belongs to other player
+		if (cells.length > 1 && cells[0].player != currentPlayer) {
+			for ( var j = 1; j < cells.length; j++)
+				// look for cell belonging to current player
+				if (cells[j].player == currentPlayer)
+					return true;
+		}
+	}
+
+	return false;
 };
