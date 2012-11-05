@@ -54,7 +54,10 @@ function WelcomeScreenController($scope, $http) {
 		};
 		for (var i=0; i<$scope.selectedGame.parameters.length; i++){
 			var gameOption = $scope.selectedGame.parameters[i];
-			$scope.createdGame.gameParameters[gameOption.name] = gameOption.values[Number(gameOption.defaultValueIndex)];
+			if (gameOption.type == 'enumeration')
+				$scope.createdGame.gameParameters[gameOption.name] = gameOption.values[Number(gameOption.defaultValueIndex)];
+			if (gameOption.type == 'boolean')
+				$scope.createdGame.gameParameters[gameOption.name] = gameOption.defaultValue;
 		}
 		$('#create-game-dialog').dialog({
 			modal : true,
