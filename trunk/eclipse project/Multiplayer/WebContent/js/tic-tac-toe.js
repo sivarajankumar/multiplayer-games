@@ -43,7 +43,7 @@ function TicTacToeController($scope, $http) {
 			$scope.winner = $scope.players[$scope.currentPlayerIndex];
 			$scope.victoryText = $scope.winner + " wins!";
 			controller.displayVictoryDialog();
-		} else if (boardIsFull(board)) {
+		} else if (boardIsFull($scope.board)) {
 			$scope.winner = 'noone';
 			$scope.victoryText = 'Draw!';
 			controller.displayVictoryDialog();
