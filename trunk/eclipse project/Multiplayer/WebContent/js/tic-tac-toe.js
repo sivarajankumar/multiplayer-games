@@ -3,7 +3,7 @@ angular.module('tic-tac-toe', []);
 
 function TicTacToeController($scope, $http) {
 	var controller = this;
-	var boardLogic = null;
+	var boardLogic = new TicTacToeBoardLogic();
 
 	this.initSubscription($scope);
 	this.initGameOverDialogMethods($scope, $http);
@@ -14,8 +14,7 @@ function TicTacToeController($scope, $http) {
 	
 	// setup board
 	$scope.resetBoard = function() {
-		$scope.board = controller.createBoard(boardSize);
-		boardLogic = new BoardLogic($scope.board);
+		$scope.board = boardLogic.initBoard(boardSize);
 		$scope.currentPlayerIndex = 0;
 		delete $scope.winner;
 		delete $scope.opponentsLastMove;
@@ -67,7 +66,18 @@ function TicTacToeController($scope, $http) {
 TicTacToeController.prototype = new AngularController();
 TicTacToeController.prototype.constructor = TicTacToeController;
 
-TicTacToeController.prototype.createBoard = function(length) {
+TicTacToeController.prototype.opponentMoves = function($scope, move){
+	$scope.$apply(function() {
+		$scope.board[move.row][move.column].content = $scope.opponent;
+		$scope.opponentsLastMove = $scope.board[move.row][move.column];
+		$scope.checkVictory();
+	});
+};
+
+function TicTacToeBoardLogic(){
+}
+
+TicTacToeBoardLogic.prototype.initBoard = function(length) {
 	var board = [];
 
 	for ( var i = 0; i < length; i++) {
@@ -78,22 +88,12 @@ TicTacToeController.prototype.createBoard = function(length) {
 		board.push(row);
 	}
 
+	this.board = board;
+	
 	return board;
 };
 
-TicTacToeController.prototype.opponentMoves = function($scope, move){
-	$scope.$apply(function() {
-		$scope.board[move.row][move.column].content = $scope.opponent;
-		$scope.opponentsLastMove = $scope.board[move.row][move.column];
-		$scope.checkVictory();
-	});
-};
-
-function BoardLogic(board){
-	this.board = board;
-}
-
-BoardLogic.prototype.boardIsFull = function() {
+TicTacToeBoardLogic.prototype.boardIsFull = function() {
 	var board = this.board;
 	for ( var i = 0; i < board.length; i++) {
 		for ( var j = 0; j < board.length; j++) {
@@ -104,7 +104,7 @@ BoardLogic.prototype.boardIsFull = function() {
 	return true;
 };
 
-BoardLogic.prototype.currentPlayerIsVictorious = function () {
+TicTacToeBoardLogic.prototype.currentPlayerIsVictorious = function () {
 	var board = this.board;
 	var length = board.length;
 
