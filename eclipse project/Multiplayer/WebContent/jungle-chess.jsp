@@ -34,9 +34,12 @@
 	<script type="text/javascript" src="js/jungle-chess.js"></script>
 </head>
 <body>
-	<h1>Jungle Chess</h1>
+
+<% // TODO beautify %>
 
 	<div id="content" ng-app="jungle-chess" ng-controller="JungleChessController">
+	
+		<h1>Jungle Chess</h1>
 
 		<div id="gameContainer">
 
