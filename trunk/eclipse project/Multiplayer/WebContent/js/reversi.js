@@ -194,7 +194,8 @@ function ReversiController($scope, $http) {
 		$scope.currentPlayerIndex = 0;
 		$scope.currentPlayer = controller.players[0];
 		$scope.otherPlayer = controller.players[1];
-		$scope.winner = null;
+		delete $scope.winner ;
+		delete $scope.opponentsLastMove;
 		$scope.updateScore();
 	};
 	$scope.resetBoard();
@@ -207,6 +208,7 @@ ReversiController.prototype.constructor = ReversiController;
 ReversiController.prototype.opponentMoves = function($scope, move) {
 	$scope.$apply(function() {
 		$scope.applyMove($scope.opponent, move.row, move.column);
+		$scope.opponentsLastMove = $scope.board[move.row][move.column];
 		$scope.checkVictory();
 	});
 };
