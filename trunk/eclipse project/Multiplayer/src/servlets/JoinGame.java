@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.User;
 import services.GameRegistry;
+import servlets.GameCreator.GameCreateCommand;
 import web.ChannelUpdater;
 import web.GameListUpdater;
 
@@ -60,12 +61,14 @@ public class JoinGame extends HttpServlet {
 		String gameId = request.getParameter("gameId");
 
 		// remove started game from list of games
-		gameService.removeOpenGameForUserName(gameCreator);
+		GameCreateCommand command = gameService.removeOpenGameForUserName(gameCreator);
+		// add options
+		gameService.setGameOptions(gameCreator, gameJoiner, command.gameParameters);
 		// refresh game list
 		gameListUpdater.updateOpenGamesList(request, gameCreator, gameJoiner);
 
 		GameStart game = new GameStart();
-		game.page = gameId + ".html";
+		game.page = gameId + ".jsp";
 
 		// redirect creator
 		game.player = gameCreator;

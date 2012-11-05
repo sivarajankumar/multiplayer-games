@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import model.Game;
-import model.User;
 import persistence.GameRepository;
 import persistence.mock.GameRepositoryMock;
+import servlets.GameCreator.GameCreateCommand;
 
 public class GameRegistry {
 
@@ -19,59 +19,61 @@ public class GameRegistry {
 		return instance;
 	}
 
-	private Map<User, String> gameMap = new HashMap<>();
+	private Map<String, GameCreateCommand> gameMap = new HashMap<>();
+	private Map<String, Object> gameOptionsMap = new HashMap<>();
 
 	// TODO dependency injection
 	private GameRepository gameRepository = new GameRepositoryMock();
-	
-	private GameRegistry(){
+
+	private GameRegistry() {
 		// singleton
 	}
 
-	public void addCreatedGame(User user, String gameType) {
-		gameMap.put(user, gameType);
+	public void addCreatedGame(String userName, GameCreateCommand createCommand) {
+		gameMap.put(userName, createCommand);
 	}
 	
-	public void removeOpenGameForUser(User user) {
-		gameMap.remove(user);
-	};
+	public GameCreateCommand removeOpenGameForUserName(String gameCreator) {
+		return gameMap.remove(gameCreator);
+	}
 	
-	public void removeOpenGameForUserName(String gameCreator) {
-		User user = null;
-		for (User u : gameMap.keySet()){
-			if (u.getUserName().equals(gameCreator)){
-				user = u;
-				break;
-			}
-		}
-		if (user != null)
-			gameMap.remove(user);
+	public void setGameOptions(String player1, String player2, Object options){
+		gameOptionsMap.put(player1, options);
+		gameOptionsMap.put(player2, options);
+	}
+
+	public Object getGameCreateOptionsForUser(String userName) {
+		return gameOptionsMap.get(userName);
 	}
 
 	static class GameDTO {
 		String playerName;
-		
+
 		String gameId;
 		String gameName;
 		String gameDescription;
 		String gameTitle;
-		
-		public GameDTO(String userName, Game game) {
+
+		Object parameters;
+
+		public GameDTO(String userName, Game game, Object gameParameters) {
 			playerName = userName;
 			gameId = game.getGameId();
 			gameTitle = game.getShortName();
 			gameName = game.getName();
 			gameDescription = game.getDescription();
+			parameters = gameParameters;
 		}
 	}
 
-	public List<GameDTO> getGameDTOs() {
+	public List<GameDTO> getGameDTOsForOpenGames() {
 
 		List<GameDTO> games = new LinkedList<>();
 
-		for (Entry<User, String> entry : gameMap.entrySet()) {
-			String gameId = entry.getValue();
-			GameDTO dto = new GameDTO(entry.getKey().getUserName(), gameRepository.getGameByGameId(gameId));
+		for (Entry<String, GameCreateCommand> entry : gameMap.entrySet()) {
+			GameCreateCommand gameCreateCommand = entry.getValue();
+			String gameId = gameCreateCommand.gameType;
+			GameDTO dto = new GameDTO(entry.getKey(), gameRepository.getGameByGameId(gameId), gameCreateCommand.gameParameters);
 			games.add(dto);
 		}
 		return games;
