@@ -1,7 +1,7 @@
 angular.module('welcome-screen', [ 'uiComponents' ]);
 
 function WelcomeScreenController($scope, $http) {
-
+	
 	var controller = this;
 	this.user = loggedInUser;
 
@@ -47,19 +47,30 @@ function WelcomeScreenController($scope, $http) {
 	};
 
 	$scope.createGame = function() {
-		$.blockUI();
-		$http({
-			method : 'POST',
-			url : "create-game",
-			data : {
-				"gameType" : $scope.selectedGame.id,
-				"gameParameters" : {
-					boardSize : 8,
-					initialSetup : 'diagonal'
+		$scope.createdGame = {
+			"gameType" : $scope.selectedGame.id,
+			"gameParameters" : {
+			}
+		};
+		for (var i=0; i<$scope.selectedGame.parameters.length; i++){
+			var gameOption = $scope.selectedGame.parameters[i];
+			$scope.createdGame.gameParameters[gameOption.name] = gameOption.values[Number(gameOption.defaultValueIndex)];
+		}
+		$('#create-game-dialog').dialog({
+			modal : true,
+			buttons : {
+				OK : function() {
+					$(this).dialog("close");
+					$.blockUI();
+					$http({
+						method : 'POST',
+						url : "create-game",
+						data : $scope.createdGame
+					}).success(function() {
+						controller.connectToLoggedInUserChannel();
+					});
 				}
 			}
-		}).success(function() {
-			controller.connectToLoggedInUserChannel();
 		});
 	};
 
