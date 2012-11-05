@@ -1,5 +1,6 @@
 function AngularController() {
 	this.url = 'game-command';
+	// $scope.resetBoard();
 }
 
 AngularController.prototype.initSubscription = function($scope) {
@@ -60,7 +61,7 @@ AngularController.prototype.initGameOverDialogMethods = function($scope, $http) 
 			console.log("restart posted");
 		});
 		controller.hideDialogs();
-		controller.resetBoard();
+		$scope.resetBoard();
 	};
 
 	$scope.backToLobby = function() {
