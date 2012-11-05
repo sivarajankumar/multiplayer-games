@@ -52,7 +52,7 @@
 		
 		<div id="board">
 			<div class="row" ng-repeat="row in board">
-				<div class="cell" ng-repeat="cell in row" ng-click="placePiece($parent.$index, $index)" >
+				<div class="cell" ng-class="{ 'last-move' : cell == opponentsLastMove }" ng-repeat="cell in row" ng-click="placePiece($parent.$index, $index)" >
 					<div class="circle {{cell.player.name}}" ng-show="cell.player"></div>
 				</div>
 			</div>

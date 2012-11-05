@@ -27,6 +27,10 @@
 	background-color: green;
 }
 
+.cell.last-move {
+	background-color: red;
+}
+
 .circle {
     width: 50px;
     height: 50px;
