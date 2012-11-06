@@ -1,4 +1,4 @@
-angular.module('jungle-chess', []);
+angular.module('jungle-chess', ['uiComponents']);
 
 var alternateRules;
 
