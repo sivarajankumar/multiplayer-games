@@ -64,11 +64,11 @@
 				<ul id="game-option-list">
 					<li ng-repeat="gameOption in selectedGame.options | filter:{type : 'enumeration'}">
 						<label for="{{gameOption.name}}-select">{{ gameOption.label }}</label>
-						<select id="{{gameOption.name}}-select" ng-model="createdGame.gameParameters[gameOption.name]" ng-options="value for value in gameOption.values"></select>
+						<select id="{{gameOption.name}}-select" ng-model="createdGame.gameOptions[gameOption.name]" ng-options="value for value in gameOption.values"></select>
 					</li>
 					<li ng-repeat="gameOption in selectedGame.options | filter:{type : 'boolean'}">
 						<label for="{{gameOption.name}}-checkbox">{{ gameOption.label }}</label>
-						<input id="{{gameOption.name}}-checkbox" type="checkbox" ng-model="createdGame.gameParameters[gameOption.name]" />
+						<input id="{{gameOption.name}}-checkbox" type="checkbox" ng-model="createdGame.gameOptions[gameOption.name]" />
 					</li>
 				</ul>
 			</div>
