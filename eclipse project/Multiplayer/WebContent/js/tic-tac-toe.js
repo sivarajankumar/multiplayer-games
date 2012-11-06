@@ -14,7 +14,7 @@ function TicTacToeController($scope, $http) {
 	
 	// setup board
 	$scope.resetBoard = function() {
-		$scope.board = boardLogic.initBoard(controller.parameters.boardSize);
+		$scope.board = boardLogic.initBoard(controller.options.boardSize);
 		$scope.currentPlayerIndex = 0;
 		delete $scope.winner;
 		delete $scope.opponentsLastMove;

@@ -99,7 +99,7 @@ function ReversiController($scope, $http) {
 
 	// setup board
 	$scope.resetBoard = function() {
-		$scope.board = boardLogic.initBoard(controller.parameters.boardSize, controller.parameters.initialSetup, this.players);
+		$scope.board = boardLogic.initBoard(controller.options.boardSize, controller.options.initialSetup, this.players);
 		$scope.currentPlayerIndex = 0;
 		$scope.currentPlayer = controller.players[0];
 		$scope.otherPlayer = controller.players[1];

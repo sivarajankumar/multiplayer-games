@@ -1,7 +1,7 @@
 function AngularController() {
 	this.url = 'game-command';
 	// $scope.resetBoard();
-	this.parameters = gameParameters;
+	this.options = gameOptions;
 }
 
 AngularController.prototype.initSubscription = function($scope) {

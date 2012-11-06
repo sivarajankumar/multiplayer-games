@@ -30,7 +30,7 @@
 	<link rel="stylesheet" href="css/jungle-chess.css" />
 
 	<script type="text/javascript">
-		var gameParameters = <%= controller.getGameOptions(user) %>;
+		var gameOptions = <%= controller.getGameOptions(user) %>;
 	</script>
 	<script type="text/javascript" src="js/jungle-chess.js"></script>
 </head>

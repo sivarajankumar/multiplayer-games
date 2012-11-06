@@ -30,7 +30,7 @@
 	<link rel="stylesheet" href="css/games.css" />
 	<link rel="stylesheet" href="css/reversi.css" />
 	<script type="text/javascript">
-		var gameParameters = <%= controller.getGameOptions(user) %>;
+		var gameOptions = <%= controller.getGameOptions(user) %>;
 	</script>
 	<script type="text/javascript" src="js/reversi.js"></script>
 </head>
