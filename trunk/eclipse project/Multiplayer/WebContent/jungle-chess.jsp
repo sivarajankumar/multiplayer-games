@@ -35,8 +35,6 @@
 </head>
 <body>
 
-<% // TODO beautify %>
-
 	<div id="content" ng-app="jungle-chess" ng-controller="JungleChessController">
 	
 		<h1>Jungle Chess</h1>
@@ -53,6 +51,12 @@
 					<td><div class="player2"></div></td>
 				</tr>
 			</table>
+			
+			<div id="current-player">
+				<p>Current player: <span class="name">{{currentPlayer.name}}</span></p>
+				<div id="player-color" class="{{currentPlayer.name}}"></div>
+				<img id="spinner" src="images/spinner.gif" ng-hide="currentPlayer == player" />
+			</div>
 
 			<div id="board">
 				<div class="row" ng-repeat="row in board">
