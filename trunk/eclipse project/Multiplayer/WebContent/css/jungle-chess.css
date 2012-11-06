@@ -20,18 +20,18 @@ div.player2 {
 }
 
 img.player1 {
-	border: 1px solid darkblue;
+	border: 5px solid darkblue;
 }
 
 img.player2 {
-	border: 1px solid magenta;
+	border: 5px solid magenta;
 }
 
 /* game board */
 #board {
 	display: table;
 	border: 1px solid black;
-	border-collapse: true;
+	border-collapse: collapse;
 	margin: 20px auto;
 }
 
@@ -44,7 +44,6 @@ img.player2 {
 	height: 100px;
 	width: 100px;
 	cursor: pointer;
-	position: relative; text-align : center;
 	vertical-align: middle;
 	text-align: center;
 }
@@ -52,7 +51,10 @@ img.player2 {
 .contentImage {
 	width: 90px;
 	height: 90px;
-	display: inline-block;
+/* 	display: inline-block;
+ */	
+	position: relative;
+	z-index: 1;
 }
 
 .power-level {
@@ -100,8 +102,12 @@ img.player2 {
 
 .cell-wrapper {
 	position: relative;
-	width: 100%;
-	height: 100%;
+	width: 100px;
+	height: 100px;
+}
+
+.last-move {
+	background-color: firebrick;
 }
 
 .move-shadow {
@@ -115,4 +121,3 @@ img.player2 {
 .attack-shadow {
 	background-color: red;
 }
-
