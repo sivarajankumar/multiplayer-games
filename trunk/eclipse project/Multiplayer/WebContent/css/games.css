@@ -1,5 +1,15 @@
 @CHARSET "ISO-8859-1";
 
+#content {
+	margin: 0 auto;
+	font-family: "Comic Sans MS", serif; 
+}
+
+h1 {
+	font-size: 30px;
+	font-weight: bold;
+}
+
 /* game dialogs */
 
 .game-dialog {

@@ -2,15 +2,7 @@
 
 #content {
 	width: 750px;
-	margin: 0 auto;
-	font-family: "Comic Sans MS", serif; 
 }
-
-h1 {
-	font-size: 30px;
-	font-weight: bold;
-}
-
 
 #current-player p {
 	display: inline-block;
