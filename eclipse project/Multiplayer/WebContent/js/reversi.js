@@ -1,4 +1,4 @@
-angular.module('reversi', []);
+angular.module('reversi', ['uiComponents']);
 
 function ReversiController($scope, $http) {
 

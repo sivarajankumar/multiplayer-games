@@ -1,4 +1,4 @@
-angular.module('tic-tac-toe', []);
+angular.module('tic-tac-toe', ['uiComponents']);
 
 
 function TicTacToeController($scope, $http) {

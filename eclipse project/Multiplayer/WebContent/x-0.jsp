@@ -24,6 +24,7 @@
 	<script type="text/javascript" src="js/lib/purl.js"></script>
 	<script type="text/javascript" src="js/my-lib/push_client.js"></script>
 	<script type="text/javascript" src="js/my-lib/angular-components.js"></script>
+	<script type="text/javascript" src="js/my-lib/angular-ui-components.js"></script>
 	
 	<link rel="stylesheet" href="css/games.css" />
 	<link rel="stylesheet" href="css/tic-tac-toe.css" />
@@ -45,18 +46,9 @@
 				<div class="cell" ng-class="{ 'last-move' : cell == opponentsLastMove }" ng-repeat="cell in row" ng-click="placeSymbol($parent.$index, $index)">{{cell.content}}</div>
 			</div>
 		</div>
-		<!-- 
-		<button ng-click="resetBoard()">Reset board</button>
-	 	-->
-	 	
-	 	<div id="victoryDialog" class="game-dialog" title="Game over">
-	 		<p>{{ victoryText }}</p>
-	 		<button class="styled-button" ng-click="playAgain()">Play again</button>
-	 		<button class="styled-button" ng-click="backToLobby()">Back to lobby</button>
-	 	</div>
-	 	<div id="messageDialog" class="game-dialog" title="Game over">
-	 		<p id="game-message"></p>
-	 	</div>
+		
+		<victorydialog></victorydialog>
+		<messagedialog></messagedialog>
 	</div>
 
 </body>

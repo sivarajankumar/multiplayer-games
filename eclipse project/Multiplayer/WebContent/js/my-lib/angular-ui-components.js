@@ -1,4 +1,5 @@
-angular.module('uiComponents', []).directive('datatable', function() {
+angular.module('uiComponents', [])
+.directive('datatable', function() {
 	var htmlTable = '<table></table>';
 	return {
 		restrict : 'E',
@@ -26,5 +27,25 @@ angular.module('uiComponents', []).directive('datatable', function() {
 			
 			return linkFunction;
 		}
+	};
+})
+.directive('victorydialog', function(){
+	return {
+		restrict : 'E',
+		template : '<div id="victoryDialog" class="game-dialog" title="Game over">' + 
+		 				'<p>{{ victoryText }}</p>' + 
+		 				'<button class="styled-button" ng-click="playAgain()">Play again</button>' +
+		 				'<button class="styled-button" ng-click="backToLobby()">Back to lobby</button>'+
+		 			'</div>',
+		 replace : true
+	};
+})
+.directive('messagedialog', function(){
+	return {
+		restrict : 'E',
+		template : '<div id="messageDialog" class="game-dialog" title="Game over">'+
+	 					'<p id="game-message"></p>' + 
+	 				'</div>',
+		replace : true
 	};
 });
