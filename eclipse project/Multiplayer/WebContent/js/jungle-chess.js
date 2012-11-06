@@ -1,7 +1,6 @@
 angular.module('jungle-chess', []);
 
 // TODO fix this
-// TODO add dialogs
 var alternateRules;
 
 function JungleChessController($scope, $http) {
@@ -37,6 +36,7 @@ function JungleChessController($scope, $http) {
 		$scope.currentPlayer = controller.players[0];
 		$scope.otherPlayer = controller.players[1];
 		delete $scope.winner;
+		delete $scope.opponentsLastMove;
 	};
 
 	$scope.resetBoard();
@@ -85,16 +85,17 @@ function JungleChessController($scope, $http) {
 			var previousRow = $scope.previousSelection.animal.x;
 			var previousColumn = $scope.previousSelection.animal.y;
 			controller.unhighlightCell(board, previousRow, previousColumn);
-			// remove enemy animal
-			if (cell.animal)
-				cell.animal.player.animals--;
-			// move animal
-			cell.animal = $scope.previousSelection.animal;
-			cell.animal.x = rowIndex;
-			cell.animal.y = columnIndex;
-			// remove references
-			$scope.previousSelection.animal = null;
-			$scope.previousSelection = null;
+			
+			$scope.moveAnimal({
+				from : {
+					row : previousRow,
+					column : previousColumn
+				},
+				to : {
+					row : rowIndex,
+					column : columnIndex
+				}
+			});
 			
 			controller.postMove($http, {
 				from : {
@@ -106,15 +107,23 @@ function JungleChessController($scope, $http) {
 					column : columnIndex
 				}
 			});
+			
+			// remove references
+			$scope.previousSelection.animal = null;
+			$scope.previousSelection = null;
 
-			if ($scope.isCurrentPlayerVictorious()) {
-				$scope.winner = $scope.currentPlayer;
-				$scope.victoryText = "victory for " + $scope.winner.name;
-				controller.displayVictoryDialog();
-			} else {
-				// next player
-				$scope.updatePlayers();
-			}
+			$scope.checkVictory();
+		}
+	};
+	
+	$scope.checkVictory = function(){
+		if ($scope.isCurrentPlayerVictorious()) {
+			$scope.winner = $scope.currentPlayer;
+			$scope.victoryText = "victory for " + $scope.winner.name;
+			controller.displayVictoryDialog();
+		} else {
+			// next player
+			$scope.updatePlayers();
 		}
 	};
 
@@ -146,36 +155,34 @@ function JungleChessController($scope, $http) {
 		// other player still has animals
 		return $scope.otherPlayer.den.animal || $scope.otherPlayer.animals == 0;
 	};
+	
+	$scope.moveAnimal = function(move){
+		var fromCell = $scope.board[move.from.row][move.from.column];
+		var movedAnimal = fromCell.animal;
+		delete fromCell.animal ;
+		
+		var toCell = $scope.board[move.to.row][move.to.column];
+		if (toCell.animal)
+			toCell.animal.player.animals--;
+		toCell.animal = movedAnimal;
+		
+		movedAnimal.x = move.to.row;
+		movedAnimal.y = move.to.column;
+	};
+	
+	$scope.highlightOpponentsLastMove = function(move){
+		$scope.opponentsLastMove = $scope.board[move.to.row][move.to.column];
+	};
 }
 
 JungleChessController.prototype = new AngularController();
 JungleChessController.prototype.constructor = JungleChessController;
 
 JungleChessController.prototype.opponentMoves = function($scope, move) {
-	
-	var controller = this;
-	
 	$scope.$apply(function(){
-		// TODO extract 'move animal' function
-		var fromCell = $scope.board[move.from.row][move.from.column];
-		var movedAnimal = fromCell.animal;
-		fromCell.animal = null;
-		
-		var toCell = $scope.board[move.to.row][move.to.column];
-		if (toCell.animal)
-			toCell.animal.player.animals--;
-		// TODO highlight
-		toCell.animal = movedAnimal;
-		
-		// TODO extract 'check victory' function
-		if ($scope.isCurrentPlayerVictorious()) {
-			$scope.winner = $scope.currentPlayer;
-			$scope.victoryText = "victory for " + $scope.winner.name;
-			controller.displayVictoryDialog();
-		} else {
-			// next player
-			$scope.updatePlayers();
-		}
+		$scope.moveAnimal(move);
+		$scope.highlightOpponentsLastMove(move);
+		$scope.checkVictory();
 	});
 };
 

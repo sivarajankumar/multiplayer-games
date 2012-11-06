@@ -6,11 +6,11 @@
 	User user = (User)session.getAttribute(Keys.SESSION_USER); 
 	GameController controller = new GameController();
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html >
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Tic-Tac-Toe</title>
+	<title>Jungle Chess</title>
 	
 	<link rel="stylesheet" href="css/blueprint/reset.css" />
 	
@@ -58,11 +58,12 @@
 				<div class="row" ng-repeat="row in board">
 					<div class="cell {{cell.type}}" ng-repeat="cell in row" ng-click="cellClicked($parent.$index, $index)">
 						<div class="cell-wrapper">
-							<div ng-show="cell.selected || cell.movementShadow || cell.attackShadow" class="cell-overlay"
-								ng-class="{ 'animal-selected' : cell.selected, 'move-shadow' : cell.movementShadow, 'attack-shadow' : cell.attackShadow  }"></div>
+							<div ng-show="cell.selected || cell.movementShadow || cell.attackShadow || cell == opponentsLastMove" class="cell-overlay"
+								ng-class="{ 'animal-selected' : cell.selected, 'move-shadow' : cell.movementShadow, 'attack-shadow' : cell.attackShadow, 'last-move' : cell == opponentsLastMove  }"></div>
 							<img src="images/jungle-chess/placeholder.png" ng-show="cell.animal" ng-src="{{cell.getAnimalPicture()}}" class="contentImage"
 								ng-class="cell.animal.player.name" />
-							<p class="power-level" ng-show="cell.animal">{{cell.animal.powerLevel}}</p>
+					<!-- 		<p class="power-level" ng-show="cell.animal">{{cell.animal.powerLevel}}</p>
+					 -->
 						</div>
 					</div>
 				</div>
