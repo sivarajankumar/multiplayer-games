@@ -29,7 +29,7 @@ angular.module('uiComponents', [])
 		}
 	};
 })
-.directive('victorydialog', function(){
+.directive('victoryDialog', function(){
 	return {
 		restrict : 'E',
 		template : '<div id="victoryDialog" class="game-dialog" title="Game over">' + 
@@ -40,7 +40,7 @@ angular.module('uiComponents', [])
 		 replace : true
 	};
 })
-.directive('messagedialog', function(){
+.directive('messageDialog', function(){
 	return {
 		restrict : 'E',
 		template : '<div id="messageDialog" class="game-dialog" title="Game over">'+
