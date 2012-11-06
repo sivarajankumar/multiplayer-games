@@ -52,8 +52,8 @@ function WelcomeScreenController($scope, $http) {
 			"gameOptions" : {
 			}
 		};
-		for (var i=0; i<$scope.selectedGame.parameters.length; i++){
-			var gameOption = $scope.selectedGame.parameters[i];
+		for (var i=0; i<$scope.selectedGame.options.length; i++){
+			var gameOption = $scope.selectedGame.options[i];
 			if (gameOption.type == 'enumeration')
 				$scope.createdGame.gameOptions[gameOption.name] = gameOption.values[Number(gameOption.defaultValueIndex)];
 			if (gameOption.type == 'boolean')
