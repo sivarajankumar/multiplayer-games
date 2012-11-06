@@ -62,8 +62,7 @@
 								ng-class="{ 'animal-selected' : cell.selected, 'move-shadow' : cell.movementShadow, 'attack-shadow' : cell.attackShadow, 'last-move' : cell == opponentsLastMove  }"></div>
 							<img src="images/jungle-chess/placeholder.png" ng-show="cell.animal" ng-src="{{cell.getAnimalPicture()}}" class="contentImage"
 								ng-class="cell.animal.player.name" />
-					<!-- 		<p class="power-level" ng-show="cell.animal">{{cell.animal.powerLevel}}</p>
-					 -->
+							<p class="power-level" ng-show="cell.animal">{{cell.animal.powerLevel}}</p>
 						</div>
 					</div>
 				</div>
