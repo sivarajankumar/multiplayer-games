@@ -1,6 +1,10 @@
 angular.module('jungle-chess', []);
 
+var alternateRules;
+
 function JungleChessController($scope, $http) {
+	
+	alternateRules = this.parameters;
 	
 	var controller = this;
 	
@@ -309,25 +313,17 @@ JungleChessController.prototype.canAttack = function(place, destination) {
 
 JungleChessController.prototype.createBoard = function() {
 	var board = [];
-	var animals = [ 
-	                new Animal('Rat', 2, 0, 0, this), 
-	                new Animal('Cat', 1, 5, 1, this), 
-	                new Animal('Leopard', 2, 2, 4, this), 
-	                new Animal('Lion', 0, 0, 6, this),
-	                new Animal('Elephant', 2, 6, 7, this) ];
+	var animals = [ new Animal('Rat', 2, 0, 0), new Animal('Cat', 1, 5, 1), new Animal('Leopard', 2, 2, 4), new Animal('Lion', 0, 0, 6),
+			new Animal('Elephant', 2, 6, 7) ];
 	{
 		var tiger = new Animal('Tiger', 0, 6);
 		tiger.powerLevel = this.parameters.tigerEqualsLion ? 6 : 5;
-		tiger.controller = this;
 		animals.push(tiger);
 	}
 	{
 		var dog = new Animal('Dog', 1, 1);
-		dog.controller = this;
 		var wolf = new Animal('Wolf', 2, 4);
-		wolf.controller = this;
 		var fox = new Animal('Fox', 2, 4);
-		fox.controller = this;
 		if (this.parameters.foxReplacesWolf){
 			fox.powerLevel = 2;
 			dog.powerLevel = 3;
@@ -414,20 +410,19 @@ JungleChessController.prototype.createBoard = function() {
 	return board;
 };
 
-function Animal(name, startingX, startingY, powerLevel, player, controller) {
+function Animal(name, startingX, startingY, powerLevel, player) {
 	this.name = name;
 	this.x = startingX;
 	this.y = startingY;
 	this.powerLevel = powerLevel || 0;
 	this.player = player;
-	this.controller = controller;
 }
 
 Animal.prototype.canSwim = function() {
 	if (this.name == 'Rat')
 		return true;
 	// alternate rule: dog may swim
-	if (this.controller.parameters.dogCanSwim && this.name == 'Dog')
+	if (alternateRules.dogCanSwim && this.name == 'Dog')
 		return true;
 	return false;
 };
@@ -437,12 +432,12 @@ Animal.prototype.canJump = function(distance) {
 		return true;
 	if (this.name == 'Lion')
 		// alternate rule: lion may not jump horizontally
-		if (this.controller.parameters.lionJump)
+		if (alternateRules.lionJump)
 			return distance > 2;
 		else
 			return true;
 	// alternate rule: leopard may jump horizontally
-	if (this.name == 'Leopard' && this.controller.parameters.leopardJump && distance == 2)
+	if (this.name == 'Leopard' && alternateRules.leopardJump && distance == 2)
 		return true;
 	return false;
 };
@@ -450,7 +445,7 @@ Animal.prototype.canJump = function(distance) {
 Animal.prototype.canKill = function(defender) {
 	var attacker = this;
 	// alternate rule: elephant may not kill the rat
-	if (!this.controller.parameters.elephantMayKillRat && attacker.name == 'Elephant' && defender.name == 'Rat')
+	if (!alternateRules.elephantMayKillRat && attacker.name == 'Elephant' && defender.name == 'Rat')
 		return false;
 	// a larger animal may attack a smaller or equal one
 	if (attacker.powerLevel >= defender.powerLevel) {
