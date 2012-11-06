@@ -24,7 +24,6 @@ public class GameRepositoryMock implements GameRepository {
 	}
 
 	private Game createJungleChess() {
-		// TODO integrate jungle chess
 		Game jungleChess = new Game();
 		jungleChess.setGameId("jungle-chess");
 		jungleChess.setShortName("Jungle Chess");
