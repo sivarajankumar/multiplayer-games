@@ -47,8 +47,8 @@
 			</div>
 		</div>
 		
-		<victorydialog></victorydialog>
-		<messagedialog></messagedialog>
+		<victory-dialog></victory-dialog>
+		<message-dialog></message-dialog>
 	</div>
 
 </body>
