@@ -1,22 +1,28 @@
 angular.module('jungle-chess', []);
 
-// TODO multiplayer
-
 // TODO fix this
+// TODO add dialogs
 var alternateRules;
 
-function JungleChessController($scope) {
+function JungleChessController($scope, $http) {
 	
 	alternateRules = this.parameters;
 	
 	var controller = this;
-	this.players = [ {
+	
+	this.initSubscription($scope);
+	this.initGameOverDialogMethods($scope, $http);
+	
+	$scope.players = this.players = [ {
 		name : 'player1',
 		startingPosition : 'top'
 	}, {
 		name : 'player2',
 		startingPosition : 'bottom'
 	} ];
+	
+	this.initScopePlayers($scope);
+	
 	this.types = {
 		water : 'water',
 		trap : 'trap',
@@ -30,22 +36,21 @@ function JungleChessController($scope) {
 		$scope.currentPlayerIndex = 0;
 		$scope.currentPlayer = controller.players[0];
 		$scope.otherPlayer = controller.players[1];
-		$scope.winner = null;
+		delete $scope.winner;
 	};
 
 	$scope.resetBoard();
 
 	$scope.cellClicked = function(rowIndex, columnIndex) {
 
-		if ($scope.winner)
+		if ($scope.winner || $scope.currentPlayer != $scope.player)
 			return;
-
+		
 		var board = this.board;
-
 		var cell = board[rowIndex][columnIndex];
 
 		// if own animal selected
-		if (cell.animal && cell.animal.player == controller.players[$scope.currentPlayerIndex]) {
+		if (cell.animal && cell.animal.player == $scope.currentPlayer) {
 
 			if ($scope.previousSelection) {
 
@@ -73,7 +78,7 @@ function JungleChessController($scope) {
 			}
 
 			$scope.previousSelection = cell;
-		}
+		} else 
 		// if moving animal
 		if (cell.movementShadow || cell.attackShadow) {
 			// unhighlight animal
@@ -90,14 +95,25 @@ function JungleChessController($scope) {
 			// remove references
 			$scope.previousSelection.animal = null;
 			$scope.previousSelection = null;
+			
+			controller.postMove($http, {
+				from : {
+					row : previousRow,
+					column : previousColumn
+				},
+				to : {
+					row : rowIndex,
+					column : columnIndex
+				}
+			});
 
 			if ($scope.isCurrentPlayerVictorious()) {
 				$scope.winner = $scope.currentPlayer;
-				alert("victory for " + $scope.winner.name);
+				$scope.victoryText = "victory for " + $scope.winner.name;
+				controller.displayVictoryDialog();
 			} else {
 				// next player
 				$scope.updatePlayers();
-
 			}
 		}
 	};
@@ -134,6 +150,34 @@ function JungleChessController($scope) {
 
 JungleChessController.prototype = new AngularController();
 JungleChessController.prototype.constructor = JungleChessController;
+
+JungleChessController.prototype.opponentMoves = function($scope, move) {
+	
+	var controller = this;
+	
+	$scope.$apply(function(){
+		// TODO extract 'move animal' function
+		var fromCell = $scope.board[move.from.row][move.from.column];
+		var movedAnimal = fromCell.animal;
+		fromCell.animal = null;
+		
+		var toCell = $scope.board[move.to.row][move.to.column];
+		if (toCell.animal)
+			toCell.animal.player.animals--;
+		// TODO highlight
+		toCell.animal = movedAnimal;
+		
+		// TODO extract 'check victory' function
+		if ($scope.isCurrentPlayerVictorious()) {
+			$scope.winner = $scope.currentPlayer;
+			$scope.victoryText = "victory for " + $scope.winner.name;
+			controller.displayVictoryDialog();
+		} else {
+			// next player
+			$scope.updatePlayers();
+		}
+	});
+};
 
 JungleChessController.prototype.unhighlightCell = function(board, rowIndex, columnIndex) {
 	var cell = board[rowIndex][columnIndex];

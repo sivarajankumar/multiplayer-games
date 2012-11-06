@@ -98,6 +98,12 @@ img.player2 {
 	background-color: grey;
 }
 
+.cell-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
 .move-shadow {
 	background-color: grey;
 }
