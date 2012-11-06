@@ -12,6 +12,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Games</title>
 	
+	<link rel="stylesheet" href="css/blueprint/reset.css" />
+	
 	<!-- jQuery -->
 	<link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.0/themes/base/jquery-ui.css" />
 	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
@@ -59,15 +61,15 @@
 			</form>
 			<div id="create-game-dialog" class="game-dialog">
 				<p>Start playing {{selectedGame.name}} with the following rules:</p>
-				<ul>
+				<ul id="game-option-list">
 					<% // TODO rename everywhere either to game options or game parameters %>
 					<% // TODO beautify %>
 					<li ng-repeat="gameOption in selectedGame.parameters | filter:{type : 'enumeration'}">
-						<label for="{{gameOption.name}}-select">{{ gameOption.name }}</label>
+						<label for="{{gameOption.name}}-select">{{ gameOption.label }}</label>
 						<select id="{{gameOption.name}}-select" ng-model="createdGame.gameParameters[gameOption.name]" ng-options="value for value in gameOption.values"></select>
 					</li>
 					<li ng-repeat="gameOption in selectedGame.parameters | filter:{type : 'boolean'}">
-						<label for="{{gameOption.name}}-checkbox">{{ gameOption.name }}</label>
+						<label for="{{gameOption.name}}-checkbox">{{ gameOption.label }}</label>
 						<input id="{{gameOption.name}}-checkbox" type="checkbox" ng-model="createdGame.gameParameters[gameOption.name]" />
 					</li>
 				</ul>

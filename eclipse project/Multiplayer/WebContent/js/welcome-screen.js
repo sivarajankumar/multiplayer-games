@@ -61,6 +61,7 @@ function WelcomeScreenController($scope, $http) {
 		}
 		$('#create-game-dialog').dialog({
 			modal : true,
+			width: 500,
 			buttons : {
 				OK : function() {
 					$(this).dialog("close");

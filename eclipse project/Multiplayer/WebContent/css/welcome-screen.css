@@ -18,3 +18,7 @@ tr {
 .join-game-button {
 	
 }
+
+#game-option-list {
+	list-style: none;
+}
