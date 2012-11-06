@@ -37,7 +37,7 @@ public class GameCreator extends HttpServlet {
 	}
 
 	public static class GameCreateCommand {
-		public Object gameParameters;
+		public Object gameOptions;
 		public String gameType;
 	}
 

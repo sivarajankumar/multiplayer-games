@@ -11,16 +11,16 @@ public class Game {
 	private String name;
 	private String description;
 
-	private List<GameParameter> parameters;
+	private List<GameOption> options;
 
-	public void addGameParameter(GameParameter parameter) {
-		if (parameters == null)
-			parameters = new LinkedList<>();
-		parameters.add(parameter);
+	public void addGameOption(GameOption option) {
+		if (options == null)
+			options = new LinkedList<>();
+		options.add(option);
 	}
 
-	public List<GameParameter> getGameParameters() {
-		return Collections.unmodifiableList(parameters);
+	public List<GameOption> getGameOptions() {
+		return Collections.unmodifiableList(options);
 	}
 
 	public String getGameId() {

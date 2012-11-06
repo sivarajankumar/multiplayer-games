@@ -49,15 +49,15 @@ function WelcomeScreenController($scope, $http) {
 	$scope.createGame = function() {
 		$scope.createdGame = {
 			"gameType" : $scope.selectedGame.id,
-			"gameParameters" : {
+			"gameOptions" : {
 			}
 		};
 		for (var i=0; i<$scope.selectedGame.parameters.length; i++){
 			var gameOption = $scope.selectedGame.parameters[i];
 			if (gameOption.type == 'enumeration')
-				$scope.createdGame.gameParameters[gameOption.name] = gameOption.values[Number(gameOption.defaultValueIndex)];
+				$scope.createdGame.gameOptions[gameOption.name] = gameOption.values[Number(gameOption.defaultValueIndex)];
 			if (gameOption.type == 'boolean')
-				$scope.createdGame.gameParameters[gameOption.name] = gameOption.defaultValue;
+				$scope.createdGame.gameOptions[gameOption.name] = gameOption.defaultValue;
 		}
 		$('#create-game-dialog').dialog({
 			modal : true,

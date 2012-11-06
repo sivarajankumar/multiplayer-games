@@ -63,7 +63,7 @@ public class JoinGame extends HttpServlet {
 		// remove started game from list of games
 		GameCreateCommand command = gameService.removeOpenGameForUserName(gameCreator);
 		// add options
-		gameService.setGameOptions(gameCreator, gameJoiner, command.gameParameters);
+		gameService.setGameOptions(gameCreator, gameJoiner, command.gameOptions);
 		// refresh game list
 		gameListUpdater.updateOpenGamesList(request, gameCreator, gameJoiner);
 

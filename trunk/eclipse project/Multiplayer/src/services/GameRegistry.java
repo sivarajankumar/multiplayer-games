@@ -73,7 +73,7 @@ public class GameRegistry {
 		for (Entry<String, GameCreateCommand> entry : gameMap.entrySet()) {
 			GameCreateCommand gameCreateCommand = entry.getValue();
 			String gameId = gameCreateCommand.gameType;
-			GameDTO dto = new GameDTO(entry.getKey(), gameRepository.getGameByGameId(gameId), gameCreateCommand.gameParameters);
+			GameDTO dto = new GameDTO(entry.getKey(), gameRepository.getGameByGameId(gameId), gameCreateCommand.gameOptions);
 			games.add(dto);
 		}
 		return games;
