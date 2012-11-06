@@ -31,15 +31,15 @@ public class GameRepositoryMock implements GameRepository {
 		String jungleChessDescription = "Jungle or Dou Shou Qi (Chinese: \"Game of Fighting Animals\") is a traditional Chinese board game played on a 7×9 board. The game is also known as The Jungle Game, Jungle Chess, or Animal Chess. Each side has eight pieces representing different animals, each with a different rank. Higher ranking pieces can capture all pieces of identical or weaker ranking. The goal of the game is either to move a piece onto a special square, the den, on the opponent's side of the board, or capture all of the opponent's pieces.";
 		jungleChess.setDescription(jungleChessDescription);
 		
-		jungleChess.addGameParameter( new BooleanParameter("elephantMayKillRat", true) );
-		jungleChess.addGameParameter( new BooleanParameter("tigerEqualsLion", false) );
-		jungleChess.addGameParameter( new BooleanParameter("leopardJump", false) );
-		jungleChess.addGameParameter( new BooleanParameter("lionJump", true) );
-		jungleChess.addGameParameter( new BooleanParameter("universalTraps", false) );
-		jungleChess.addGameParameter( new BooleanParameter("foxReplacesWolf", false) );
-		jungleChess.addGameParameter( new BooleanParameter("attackFromWater", false) );
-		jungleChess.addGameParameter( new BooleanParameter("highLevelAnimalsMayEnterTraps", true));
-		jungleChess.addGameParameter( new BooleanParameter("dogCanSwim", false));
+		jungleChess.addGameParameter( new BooleanParameter("elephantMayKillRat", "The elephant may kill the rat", true) );
+		jungleChess.addGameParameter( new BooleanParameter("tigerEqualsLion", "The tiger and the lion are equally strong", false) );
+		jungleChess.addGameParameter( new BooleanParameter("leopardJump", "The leopard may jump horizontally across water", false) );
+		jungleChess.addGameParameter( new BooleanParameter("lionJump", "The lion may jump across water", true) );
+		jungleChess.addGameParameter( new BooleanParameter("universalTraps", "All traps work the same for both players", false) );
+		jungleChess.addGameParameter( new BooleanParameter("foxReplacesWolf", "The fox replaces the wolf", false) );
+		jungleChess.addGameParameter( new BooleanParameter("attackFromWater", "Animals may attack when entering/exiting water", false) );
+		jungleChess.addGameParameter( new BooleanParameter("highLevelAnimalsMayEnterTraps", "Animals with power level 4 and above may enter traps", true));
+		jungleChess.addGameParameter( new BooleanParameter("dogCanSwim", "The dog can swim", false));
 		
 		return jungleChess;
 	}
@@ -53,11 +53,11 @@ public class GameRepositoryMock implements GameRepository {
 		reversi.setDescription(reversiDescription);
 
 		String[] boardSizes = { "4", "6", "8", "10", "12" };
-		EnumerationParameter boardSize = new EnumerationParameter("boardSize", boardSizes, 2);
+		EnumerationParameter boardSize = new EnumerationParameter("boardSize", "Board size", boardSizes, 2);
 		reversi.addGameParameter(boardSize);
 
 		String[] setups = { "horizontal", "diagonal" };
-		EnumerationParameter initialSetup = new EnumerationParameter("initialSetup", setups, 1);
+		EnumerationParameter initialSetup = new EnumerationParameter("initialSetup", "Initial setup", setups, 1);
 		reversi.addGameParameter(initialSetup);
 
 		return reversi;
@@ -72,7 +72,7 @@ public class GameRepositoryMock implements GameRepository {
 		x0.setDescription(x0Description);
 
 		String[] boardSizes = { "3", "4", "5" };
-		EnumerationParameter boardSize = new EnumerationParameter("boardSize", boardSizes, 0);
+		EnumerationParameter boardSize = new EnumerationParameter("boardSize", "Board size", boardSizes, 0);
 		x0.addGameParameter(boardSize);
 
 		return x0;
