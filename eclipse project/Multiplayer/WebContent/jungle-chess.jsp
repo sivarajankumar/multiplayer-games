@@ -57,16 +57,25 @@
 			<div id="board">
 				<div class="row" ng-repeat="row in board">
 					<div class="cell {{cell.type}}" ng-repeat="cell in row" ng-click="cellClicked($parent.$index, $index)">
-						<div ng-show="cell.selected || cell.movementShadow || cell.attackShadow" class="cell-overlay"
-							ng-class="{ 'animal-selected' : cell.selected, 'move-shadow' : cell.movementShadow, 'attack-shadow' : cell.attackShadow  }"></div>
-						<img src="images/jungle-chess/placeholder.png" ng-show="cell.animal" ng-src="{{cell.getAnimalPicture()}}" class="contentImage"
-							ng-class="cell.animal.player.name" />
-						<p class="power-level" ng-show="cell.animal">{{cell.animal.powerLevel}}</p>
+						<div class="cell-wrapper">
+							<div ng-show="cell.selected || cell.movementShadow || cell.attackShadow" class="cell-overlay"
+								ng-class="{ 'animal-selected' : cell.selected, 'move-shadow' : cell.movementShadow, 'attack-shadow' : cell.attackShadow  }"></div>
+							<img src="images/jungle-chess/placeholder.png" ng-show="cell.animal" ng-src="{{cell.getAnimalPicture()}}" class="contentImage"
+								ng-class="cell.animal.player.name" />
+							<p class="power-level" ng-show="cell.animal">{{cell.animal.powerLevel}}</p>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<button ng-click="resetBoard()">Reset board</button>
+			<div id="victoryDialog" class="game-dialog" title="Game over">
+		 		<p>{{ victoryText }}</p>
+		 		<button class="styled-button" ng-click="playAgain()">Play again</button>
+		 		<button class="styled-button" ng-click="backToLobby()">Back to lobby</button>
+		 	</div>
+		 	<div id="messageDialog" class="game-dialog" title="Game over">
+		 		<p id="game-message"></p>
+		 	</div>
 
 		</div>
 
