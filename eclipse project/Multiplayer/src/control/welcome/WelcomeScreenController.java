@@ -7,7 +7,6 @@ import java.util.List;
 import model.Game;
 import model.GameOption;
 import persistence.GameRepository;
-import persistence.mock.GameRepositoryMock;
 import services.GameRegistry;
 
 import com.google.gson.Gson;
@@ -16,13 +15,11 @@ public class WelcomeScreenController {
 
 	private Gson gson = new Gson();
 
-	private GameRegistry gameService;
+	private GameRegistry gameRegistry = GameRegistry.getInstance();
 
-	// TODO dependency injection
-	private GameRepository gameRepository = new GameRepositoryMock();
-
-	public WelcomeScreenController() {
-		gameService = GameRegistry.getInstance();
+	private GameRepository gameRepository;
+	public void setGameRepository(GameRepository gameRepository) {
+		this.gameRepository = gameRepository;
 	}
 
 	static class GameDTO {
@@ -45,7 +42,7 @@ public class WelcomeScreenController {
 	}
 
 	public String getOpenGames() {
-		return gson.toJson(gameService.getGameDTOsForOpenGames());
+		return gson.toJson(gameRegistry.getGameDTOsForOpenGames());
 	}
 
 }

@@ -14,5 +14,11 @@
 	<context:component-scan base-package="persistence" />
 	
 	<bean id="gameRepository" class="persistence.mock.GameRepositoryMock"></bean>
+	
+	<bean id="gameListUpdater" class="web.GameListUpdater"></bean>
+	
+	<bean id="welcomeScreenController" class="control.welcome.WelcomeScreenController">
+		<property name="gameRepository" ref="gameRepository"></property>
+	</bean>
 
 </beans>
