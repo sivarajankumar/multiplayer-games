@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.User;
+import model.PlayerImpl;
 import services.GameRegistry;
 import servlets.GameCreator.GameCreateCommand;
 import web.ChannelUpdater;
@@ -50,7 +50,7 @@ public class JoinGame extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String gameCreator = request.getParameter("playerName");
-		User player = (User) request.getSession().getAttribute(Keys.SESSION_USER);
+		PlayerImpl player = (PlayerImpl) request.getSession().getAttribute(Keys.SESSION_USER);
 		String gameJoiner = player.getUserName();
 
 		if (gameCreator.equals(gameJoiner)) {

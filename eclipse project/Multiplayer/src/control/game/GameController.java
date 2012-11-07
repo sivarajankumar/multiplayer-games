@@ -2,7 +2,7 @@ package control.game;
 
 import com.google.gson.Gson;
 
-import model.User;
+import model.PlayerImpl;
 import services.GameRegistry;
 
 public class GameController {
@@ -12,7 +12,7 @@ public class GameController {
 	
 	private Gson gson = new Gson();
 	
-	public String getGameOptions(User u){
+	public String getGameOptions(PlayerImpl u){
 		return gson.toJson(gameRegistry.getGameCreateOptionsForUser(u.getUserName()));
 	}
 
