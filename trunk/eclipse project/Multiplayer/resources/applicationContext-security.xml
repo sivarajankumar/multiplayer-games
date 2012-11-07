@@ -21,7 +21,7 @@
 		<session-management invalid-session-url="/login.jsp" />
 	</http>
 
-	<beans:bean id="sessionTinkerer" class="security.SessionTinkerer">
+	<beans:bean id="sessionTinkerer" class="security.AuthenticationHandler">
 	</beans:bean>
 
 	<beans:bean id="gamesUserDetailsService" class="security.GamesUserDetailsService">
