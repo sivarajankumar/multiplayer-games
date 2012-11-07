@@ -24,15 +24,15 @@ package web;
 
 import javax.servlet.AsyncContext;
 
-import model.User;
+import model.PlayerImpl;
 
 public class Subscriber {
 
 	private String channel;
 	private final AsyncContext aCtx;
-	private User user;
+	private PlayerImpl user;
 	
-	public Subscriber(AsyncContext aCtx, String channel, User user) {
+	public Subscriber(AsyncContext aCtx, String channel, PlayerImpl user) {
 		this.aCtx = aCtx;
 		this.channel = channel;
 		this.user = user;
@@ -46,7 +46,7 @@ public class Subscriber {
 		return aCtx;
 	}
 
-	public User getUser() {
+	public PlayerImpl getUser() {
 		return user;
 	}
 	

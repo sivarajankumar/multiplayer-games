@@ -1,10 +1,10 @@
+<%@page import="model.Player"%>
 <%@page import="constants.Keys"%>
-<%@page import="model.User"%>
 <%@page import="control.welcome.WelcomeScreenController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
 	WelcomeScreenController controller = new WelcomeScreenController();
-	User user = (User)session.getAttribute(Keys.SESSION_USER);
+	Player player = (Player)session.getAttribute(Keys.SESSION_USER);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -36,7 +36,7 @@
 	<script type="text/javascript">
 		var availableGames = <%= controller.getAvailableGames() %>;
 		var games = <%=controller.getOpenGames()%>;
-		var loggedInUser = '<%= user.getUserName() %>'; 
+		var loggedInUser = '<%= player.getUserName() %>'; 
 	</script>	
 	<script type="text/javascript" src="js/welcome-screen.js"></script>
 </head>

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.User;
+import model.PlayerImpl;
 
 import constants.Constants;
 import constants.Keys;
@@ -66,7 +66,7 @@ public class CometServlet extends HttpServlet {
 		aCtx.setTimeout(20000L);
 		
 		// create a data object for this new subscription
-		User user = (User) request.getSession().getAttribute(Keys.SESSION_USER);
+		PlayerImpl user = (PlayerImpl) request.getSession().getAttribute(Keys.SESSION_USER);
 		Subscriber subscriber = new Subscriber(aCtx, channel, user);
 
 		// get the application scope so that we can add our data to the model

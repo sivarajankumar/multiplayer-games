@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.User;
+import model.PlayerImpl;
 import services.GameRegistry;
 import web.GameListUpdater;
 
@@ -57,7 +57,7 @@ public class GameCreator extends HttpServlet {
 		// deserialize to find out which player and which opponent
 		GameCreateCommand createCommand = gson.fromJson(commandString, GameCreateCommand.class);
 
-		User user = (User) request.getSession().getAttribute(Keys.SESSION_USER);
+		PlayerImpl user = (PlayerImpl) request.getSession().getAttribute(Keys.SESSION_USER);
 
 		gameRegistry.addCreatedGame(user.getUserName(), createCommand);
 

@@ -1,9 +1,9 @@
 <%@page import="control.game.GameController"%>
 <%@page import="constants.Keys"%>
-<%@page import="model.User"%>
+<%@page import="model.PlayerImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<% 
-	User user = (User)session.getAttribute(Keys.SESSION_USER); 
+<%
+	PlayerImpl user = (PlayerImpl)session.getAttribute(Keys.SESSION_USER); 
 	GameController controller = new GameController();
 %>
 <!DOCTYPE html>
